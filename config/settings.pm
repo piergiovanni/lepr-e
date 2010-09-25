@@ -38,7 +38,7 @@ sub dbparams {
 sub smtp_par {
 
         my $self = 'shift';
-	my $fromsend = 'piergiovani@gmail.com';
+	my $fromsend = '';
         my $user = 'postgres';
         my $pwd = 'postgres';
         my $host = 'localhost';
@@ -52,7 +52,7 @@ sub smtp_par {
 sub parmsetup {
 	
 	my $self = 'shift';
-	my (%psetup) = ( 'dirsetup' => '/home/pgualotto/thinkdoshare', 
+	my (%psetup) = ( 'dirsetup' => '', 
 			'domain' => 'http://localhost/tellyou/');
 	return (%psetup);
 	

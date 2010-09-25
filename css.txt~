@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+  <title></title>
+  <meta name="GENERATOR" content="Quanta Plus">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <style type="text/css">
+
+.imgp {
+    border-bottom-color : #e6ffc2;
+    border-bottom-style : solid;
+    border-bottom-width : 3;
+    border-left-color : #e6ffc2;
+    border-left-style : solid;
+    border-left-width : 3;
+    border-right-color : #e6ffc2;
+    border-right-style : solid;
+    border-right-width : 3;
+    border-top-color : #e6ffc2;
+    border-top-style : solid;
+    border-top-width : 3;
+  }
+
+
+.fchcolup {
+    background-color : #e3e3e3;
+  }
+
+
+.txt {
+    border-left:1px solid #9c9c9c;
+    padding:3 0;
+  }
+
+
+.fchcoldwn {
+    background-color : #ffffff;
+  }
+
+
+.fchcolset {
+    background-color : #cac10d;
+  }
+
+
+.tcell {
+    border-bottom-color : #aaaaaa;
+    border-bottom-style : solid;
+    border-bottom-width : 1px;
+    border-left-color : #aaaaaa;
+    border-left-style : solid;
+    border-left-width : 1px;
+    border-right-color : #aaaaaa;
+    border-right-style : solid;
+    border-right-width : 1px;
+    border-top-color : #aaaaaa;
+    border-top-style : solid;
+    border-top-width : 1px;
+  }
+
+
+.comms {
+    background-image : url('/home/pgualotto/thinkdoshare/web/img/button.png');
+    background-position : top left;
+    background-repeat : repeat-x;
+  }
+
+
+.pippo:hover {
+    background-image : url('/home/pgualotto/thinkdoshare/web/img/b_button.png');
+    background-position : top left;
+    background-repeat : repeat-x;
+    cursor : pointer;
+  }
+
+
+.alink {
+    color : #000000;
+    text-decoration : inherit;
+    vertical-align : sub;
+  }
+
+</style>
+</head>
+<body>
+<table>
+  <tbody>
+    <tr>
+      <td class="txt">bbbbbbbbbbb</td>
+      <td><span class="comms pippo"></span></td>
+    </tr>
+    <tr>
+      <td><span class="comms pippo"><a class="alink" href="#">Activity</a></span></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

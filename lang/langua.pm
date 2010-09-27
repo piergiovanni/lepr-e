@@ -51,7 +51,7 @@ sub weHome {
 
 	my $self = shift;
         my ($lg) = @_;
-	my $en_wH = "\"lepr-e\" is social content where you can post your content , flash report , your activities and you can follow and communicate whith others users of the network.";
+	my $en_wH = "\"lepr-e\" is a social networking where you can post your content , flash report , your activities and you can follow and communicate with others users.";
 	my $it_wH = "\"lepr-e\" è un social network dove puoi pubblicare i tuoi contenuti, come notizie ,  attività, seguendo anche quelle di altri utenti della rete , puoi comunicare con loro creando la tua rete di contatti.";
 	if ($lg eq "en") {
                 return ( $self, $en_wH) 
@@ -66,7 +66,13 @@ sub specPrj {
 
 	my $self = shift;
         my ($lg) = @_;
-        my $en_sPj = "<ul><li>\"lepr-e\" is developed in perl and is a open project</il><li>This software is licensed under the Affero General Public License version 3</li></ul> ";
+        my $en_sPj = <<HB;
+<ul>
+<li>\"lepr-e\" is developed in perl and is a open project</il>
+<li>This software is licensed under the Affero General Public License version 3</li>
+<li>You can download source from github repository <a href="http://github.com/piergiovanni/lepr-e">lepr-e</a></li>
+</ul> 
+HB
 	return($self,  $en_sPj);
 
 

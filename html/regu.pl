@@ -62,7 +62,7 @@ if ($hq->param("name") || $hq->param("surname") || $hq->param("email") || $hq->p
         unlink($fimg);
         $md5text = $us->pwdmd5('', $hq->param("imgv"));
 	$reg = &ac($lqpar[0], $lqpar[1], "reqact", $md5text, $hq->param("bok"));
-	if ($reg =~ /xx/) {
+	if ($reg =~ /xx/ && !$lqpar[2]) {
 		print $sessl->header(-location=>'/tellyou/login.pl', -status=>'302', -charset=>'utf-8');
 	} else {
                 $lreg = $reg;

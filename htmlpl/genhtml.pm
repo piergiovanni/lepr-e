@@ -120,6 +120,7 @@ HB1
 sub login {
 
 	my $self = shift;
+	my ($err) = @_;
 	my $leng = langua->new;
 	my $wH = $leng->weHome('en');
 	my $pr = $leng->specPrj('en');
@@ -134,10 +135,12 @@ sub login {
 </div>
 </td>
 <td>
+<div>$err</div>
 <div style="font-size : large; margin-left:130px; margin-top:30px;">
       <pre><span><b>Username</b></span><span>   <INPUT type="text" name="Username" id="Username"></span></pre>
       <pre><span><b>Password</b></span><span>   <INPUT type="password" name="password" id="password"></span></pre>
-      <pre><span><input class="butt dbord mlink_0" type="submit" id="login" value="login" /></pre>
+      <pre id="txte"></pre>
+      <pre><span><input class="butt dbord mlink_0" type="submit" id="login" value="login" /> <a href="#" onclick="vtxe(['NO_CACHE'],['txte']);">forgot password</a></pre>
 </div>
 <div style="font-size : large; margin-left:130px; margin-top:30px; ">
 <a href="/tellyou/regu.pl">Create New Account</a>

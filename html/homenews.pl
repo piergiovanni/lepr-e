@@ -409,7 +409,7 @@ sub chpass {
 sub chpassed {
 
         my ( $password, $npx, $npy ) = @_;
-        my $html = $us->chpwd( $password, $npx, $npy);
+        my $html = $us->chpwd( $username, $password, $npx, $npy);
         return ($html);
 
 }

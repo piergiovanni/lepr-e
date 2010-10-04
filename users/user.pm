@@ -221,6 +221,35 @@ sub chpwd {
 	return ($self, $res);
 }
 
+
+sub forgotpw {
+
+	my $self = shift;
+        my ( $username, $uemail) = @_;
+	my $usnews = rnews->new();
+        my $smtpc = consmtp->new();
+	my $dbc = conndb->new;
+        my $dbh = $dbc->dbuse();
+	my %psetup = config::settings::parmsetup;
+	my $idact = $usnews->idcone();
+	my $eusq = user->euser($uemail);
+	my $eusr = $dbc->sqlstate($dbh, $eusq, "f");
+	if ($eusr) {
+		$eusq = "select username from users where email = \'$uemail\';";
+		$eusr = $dbc->sqlstate($dbh, $eusq, "f");
+		$username = $eusr;
+		my $nwpw = $usnews->randpw( $eusr );
+		$eusq = "update session set active = \'0_$idact\' where users = \'$eusr\';";
+		$eusr = $dbc->sqlstate($dbh, $eusq, "update");
+		my $datas = "You username is : $username , \n The new password is : $nwpw \n Follow this link $psetup{'domain'}\/regu.pl?$username\?0_$idact?chpw to activate your account";
+		#$eusr = $smtpc->c_smtp($username, $uemail, "Riactivate your account ...", $datas);
+		#$eusr = $nwpw
+	} else {
+		$eusr = 'xx';
+	}
+	return ($self, $eusr)
+}
+
 sub acted {
 
 	my $self = shift;

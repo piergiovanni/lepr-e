@@ -31,7 +31,7 @@ my $us = user->new;
 my $cgis = sess->new;
 my $leng = langua->new;
 my $sed = $cgis->crts("reload", "reload", $hq);
-my $ajax = CGI::Ajax->new('login' => \&lg);
+my $ajax = CGI::Ajax->new('login' => \&lg, 'vtxe' => \&txte, 'repw' => \&newpw);
 my $nsed = "sgo";
 my ($lgproblem, $codmd5) = undef;
 
@@ -68,12 +68,12 @@ sub main {
 
 	#$HTML .= $hq->startform(-onsubmit=>"login([ 'Username', 'password', 'cgi'' ], [ 'resu' ])", -method=>'GET');
         $HTML .= $hq->startform();
-	$HTML .= $ht->login;
+	$HTML .= $ht->login($lgproblem);
         $HTML .=<<HT;
         <INPUT type="hidden" id='ipadd' value=$ipaddress>
         <INPUT type="hidden" id='cgi' value=$hq>
 HT
-	$HTML .= $lgproblem;
+	#$HTML .= $lgproblem;
 	$HTML .= $hq->endform;
         $HTML .= $hq->end_html;
         return $HTML;
@@ -85,9 +85,32 @@ sub lg {
 	my $sed = $cgis->crts($username, $password, $cgi );
 	my $resp = undef;
 	if ($sed =~ /Error/) {
-		$resp = "<div class=\"tba bg_tb1\" style=\"font-size : large;\"><br/>$sed</div>";
+		$resp = "<div class=\"tba bg_tb1\" style=\"font-size : large; color : red;\"><br/>$sed</div>";
 		return $resp; 
 	} else {
 		return $sed;
 	}
+}
+
+
+sub txte {
+
+	my $htm =<<HB;
+<span><b>Email</b></span><span>   <INPUT type="text" name="chema" id="chema"/><INPUT type="button" value="Send" onclick="repw(['chema', 'NO_CACHE'],['ckres', 'chema']);"/></span><div id="ckres"></div>
+HB
+	return $htm;
+
+}
+
+sub newpw {
+
+	my ($uemail) = @_;
+	my $respw = $us->forgotpw('', $uemail);
+	if ($respw eq 'xx') {
+		$respw = '<b>Email not found</b>';
+	} else {
+		$respw = "<b>check you email for a new password and to activate account</b>";
+	}
+	return ($respw, '');;
+
 }

@@ -242,8 +242,7 @@ sub forgotpw {
 		$eusq = "update session set active = \'0_$idact\' where users = \'$eusr\';";
 		$eusr = $dbc->sqlstate($dbh, $eusq, "update");
 		my $datas = "You username is : $username , \n The new password is : $nwpw \n Follow this link $psetup{'domain'}\/regu.pl?$username\?0_$idact?chpw to activate your account";
-		#$eusr = $smtpc->c_smtp($username, $uemail, "Riactivate your account ...", $datas);
-		#$eusr = $nwpw
+		$eusr = $smtpc->c_smtp($username, $uemail, "Riactivate your account ...", $datas);
 	} else {
 		$eusr = 'xx';
 	}

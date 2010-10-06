@@ -62,11 +62,11 @@ if ($hq->param("name") || $hq->param("surname") || $hq->param("email") || $hq->p
         unlink($fimg);
         $md5text = $us->pwdmd5('', $hq->param("imgv"));
 	$reg = &ac($lqpar[0], $lqpar[1], "reqact", $md5text, $hq->param("bok"));
-	if ($reg =~ /xx/ && !$lqpar[2]) {
+	if ($reg =~ /xx/) {
 		print $sessl->header(-location=>'/tellyou/login.pl', -status=>'302', -charset=>'utf-8');
 	} else {
-                $lreg = $reg;
-		print $sessl->header(-location=>"/tellyou/regu.pl?$lqpar[0]?$lqpar[1]?ee", -status=>'302', -charset=>'utf-8');
+                $lreg = $reg ;
+		print $sessl->header(-location=>"/tellyou/regu.pl?$lqpar[0]?$lqpar[1]", -status=>'302', -charset=>'utf-8');
                 #print $ajax->build_html( $hq, \&main , {-charset=>'UTF-8' });
         } 
 } else {
@@ -81,12 +81,16 @@ sub main {
                                    -head=>[$hq->meta({ -http_equiv => "cache-control", -content => "no-cache"}),
                                                 $hq->meta({ -http_equiv => "pragma", , -content => "no-cache"}),
                                                 $hq->meta({ -http_equiv => "expires", , -content => "-1"})]);
+	my $dbre = $dbc->dbuse();
+        my $sqr = $us->acted($lqpar[0], $lqpar[1]);
+        my $sqg = $dbc->sqlstate($dbre, $sqr, "f");
 	$HTML .= $hq->startform();
-	if ($lqpar[2]) { $lreg = "Error activate user";}
-	if ($lqpar[1] =~ /0_/) {
-		$HTML .= $ht->reguf($text, $imgsrc, $dir);
-	} else {
-		$HTML .= $ht->reguf();
+	if ($sqg || !$lqpar[0]) {
+		if ($lqpar[1] =~ /0_/) {
+			$HTML .= $ht->reguf($text, $imgsrc, $dir);
+		} else {
+			$HTML .= $ht->reguf();
+		}
 	}
 	$HTML .=<<HT; 
 	<INPUT type="hidden" id='ipadd' value=$ipaddress>
@@ -114,17 +118,21 @@ sub ru {
 
 sub ac {
 
-	my ( $username, $idact, $ckt, $bok, $text) = @_;
+	my ( $username, $idact, $ckt, $bok, $texty) = @_;
 	my $res;
 	my $dbreq = $dbc->dbuse();
-	my $sqlr = $us->acted($username, $idact, $ckt, $bok, $text);
-	my $sqlg = $dbc->sqlstate($dbreq, $sqlr, "update");
-	$sqlr = $us->acted($username, $idact, "ckact");
-        $sqlg = $dbc->sqlstate($dbreq, $sqlr, "f");
-	if ($sqlg == 1) {
-		$res = "xx";
-	} else {
-		$res = "Error activate user !!!!!";
+	my $sqlr = $us->acted($username, $idact);
+	my $sqlg = $dbc->sqlstate($dbreq, $sqlr, "f");
+	if ($sqlg) {
+		$sqlr = $us->acted($username, $idact, $ckt, $bok, $texty);
+		$sqlg = $dbc->sqlstate($dbreq, $sqlr, "update");
+		$sqlr = $us->acted($username, $idact, "ckact");
+        	$sqlg = $dbc->sqlstate($dbreq, $sqlr, "f");
+		if ($sqlg == 1) {
+			$res = "xx";
+		} else {
+			$res = "Error activate user !!!!! ";
+		}
 	}
 	return $res;
 }

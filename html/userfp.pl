@@ -69,7 +69,8 @@ sub main {
         #$vuser .= $sed->id() . $sed->is_expired() . $sed->is_empty;
         #my $HTML = $hq->start_html(-script => {-src=> "/tds/js/elabor.js"},
         #                           -style => {-src=> "/tds/css/style_tds.css"},
-        my $HTML = $hq->start_html( -style => {-src=> "/tds/css/style_tds.css"},
+        my $HTML = $hq->start_html(     -title   => 'lepr-e',
+					-style => {-src=> "/tds/css/style_tds.css"},
 					-head=>[$hq->meta({ -http_equiv => "cache-control", -content => "no-cache"}),
                                 	$hq->meta({ -http_equiv => "pragma", , -content => "no-cache"}),
                                 	$hq->meta({ -http_equiv => "expires", , -content => "-1"})]);
@@ -79,7 +80,7 @@ sub main {
 		$HTML .= $resp;
 	} elsif ($lqpar[1] eq 'acti') {
 		my $photop = $unw->getufil($vuser, 'profile');
-		my $vucard = $ht->ucard($vuser, 'e');
+		my $vucard = $ht->ucard($vuser, 'v', 'ppro');
 		$HTML .= <<HB;
 		<div style="margin-left:140px; margin-right:140px; margin-top:30px;">$photop $vucard</div>
 		<div style="margin-left:140px; margin-right:140px; margin-top:50px; border-color: #E6FFC2; border-width: 1px; border-style:solid; >

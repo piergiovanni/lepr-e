@@ -77,7 +77,8 @@ if ($hq->param("name") || $hq->param("surname") || $hq->param("email") || $hq->p
 
 sub main {
 	
-	my $HTML = $hq->start_html(-style => {-src=> "/tds/css/style_tds.css"},
+	my $HTML = $hq->start_html( -title   => 'lepr-e',
+				    -style => {-src=> "/tds/css/style_tds.css"},
                                    -head=>[$hq->meta({ -http_equiv => "cache-control", -content => "no-cache"}),
                                                 $hq->meta({ -http_equiv => "pragma", , -content => "no-cache"}),
                                                 $hq->meta({ -http_equiv => "expires", , -content => "-1"})]);

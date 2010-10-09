@@ -60,7 +60,7 @@ sub homen {
         #$hb2 .= "<b>$iditem[2]</b></div></td>";
 	my $photop = $unw->getufil($vuser, 'profile');
 	my $myfol_u = $unw->myfolh($vuser);
-	my $vucard = genhtml->ucard($vuser, 'e');
+	my $vucard = genhtml->ucard($vuser, 'e', 'ppro');
 	my $mesgq = $nwuser->getce($vuser, "touser", "messages", "1", "mread");
 	my $mesrq  = $dbc->sqlstate($dbpg, $mesgq, "f");
 	my $cofolsq = $nwuser->ufollow($vuser, "none", "c");
@@ -130,9 +130,10 @@ sub login {
 <tr>
 <td>
 <div style="font-size : large; margin-left:100px; margin-top:30px; border-bottom-color: #E6FFC2; border-bottom-width: 3px; border-bottom-style:solid;">
-<h3>Lepr-e flash News</h3>
-<img src="/tds/img/run_lepre.png" width="145" height="100"/><sub style="color:gray;">Developer Version</sub>
+<h3>Lepr-e    <sup style="color:gray;">Beta</sup></h3>
+<img src="/tds/img/run_lepre.png" width="145" height="100"/>
 </div>
+<div style="font-size:small; margin-left:100px; color:gray;">only for purposes of development and testing</div>
 </td>
 <td>
 <div>$err</div>
@@ -149,7 +150,7 @@ sub login {
 </tbody>
 </table>
 <div>
-<div style="float:left; width:380px; text-align:justify; margin-top:80px; margin-left:100px; ">$wH</div>
+<!--div style="float:left; width:380px; text-align:justify; margin-top:80px; margin-left:100px; ">$wH</div-->
 <div style="float:left; width:380px; text-align:justify; margin-top:80px; margin-left:100px; ">$pr</div>
 </div>
 HB1
@@ -191,7 +192,6 @@ sub reguf {
 <pre><span><b>Username</b></span><span>           <input class="tba bg_tb2" type="text" id="username" name="username"/></span></pre>
 <pre><span><b>Password</b></span><span>           <input class="tba bg_tb2" type="password" id="pwd" name="pwd"/></span></pre>
 </div>
-</td><td>
 HB1
 	}
 	if ($text && $imgsrc && $dir) {
@@ -206,7 +206,7 @@ HB1
 	}
 	if (!$text && !$imgsrc && !$dir) {
 		$hb .=<<HB1;
-<div style="margin-top:10px;"><span id=\"tres\"></span>
+<div style="margin-top:30px;"><span id=\"tres\"></span>
 <input class="butt1 dbord mlink_0" type="submit" id="ok" value="create account" />
 </div>
 </div>
@@ -223,47 +223,62 @@ sub regu {
 
 	my $self = shift;
 	my ( $username ) = @_;
+	my %listpro = (name => '', surname =>'', email =>'', alias =>'');
 	my $dbc = conndb->new;
         my $dbpg = $dbc->dbuse();
         my $nwuser = user->new;
 	my $uprosq = $nwuser->edup($username);
         my $uprorq = $dbc->sqlstate($dbpg, $uprosq, "far");
+	my $prosql = "select name, surname, email, alias from profile where username = \'$username\';";
+	my $prosqr = $dbc->sqlstate($dbpg, $prosql, "far");
+	my @prores = @$prosqr;
+	my ($y) = 0;
+	my $key;
+	foreach $key ('name', 'surname', 'email', 'alias') {
+		if ($prores[$y]) {
+			$listpro{$key} = 'checked="yes"';
+		}
+		$y += 1;
+	}
 	my @uprors = @$uprorq;
 	my $hb=<<HB1;
 <table class="tnews">
   <tbody>
     <tr>
-      <td>Name </td><td><INPUT type="text" name="name" id="name" </td><td><b>$uprors[0]<b></td>
+      <td></td><td></td><td>View Public Profile</td><td></td>
     </tr>
     <tr>
-      <td>Surname </td><td><INPUT type="text" name="surname" id="surname"></td><td><b>$uprors[1]</b></td>
+      <td>Name </td><td><INPUT type="text" name="name" id="name" </td><td><input type="checkbox" id="vname" value="$uprors[0]" $listpro{'name'}/></td><td><b>$uprors[0]<b></td>
+    </tr>
+    <tr>
+      <td>Surname </td><td><INPUT type="text" name="surname" id="surname"></td><td><input type="checkbox" id="vsurname" value="$uprors[1]" $listpro{'surname'}/></td><td><b>$uprors[1]</b></td>
     </tr>
     <tr>
       <td>Photo </td><td><iframe src="/tellyou/files.pl?$username&profile" height="70" frameborder="0"> </iframe></td>
     </tr>
     <tr>
-      <td>gender </td><td><INPUT type="text" name="gender" id="gender"></td><td><b>$uprors[2]</b></td>
+      <td>gender </td><td><INPUT type="text" name="gender" id="gender"></td><td><td><b>$uprors[2]</b></td>
     </tr>
     <tr>
-      <td>birthday </td><td><INPUT type="text" name="birth" id="birth"></td><td><b>$uprors[3]</b></td>
+      <td>birthday </td><td><INPUT type="text" name="birth" id="birth"></td><td></td><td><b>$uprors[3]</b></td>
     </tr>
     <tr>
-      <td>location </td><td><INPUT type="text" name="location" id="location"></td><td><b>$uprors[4]</b></td>
+      <td>location </td><td><INPUT type="text" name="location" id="location"></td></td><td><b>$uprors[4]</b></td>
     </tr>
     <tr>
-      <td>country </td><td><INPUT type="text" name="country" id="country"></td><td><b>$uprors[5]</b></td>
+      <td>country </td><td><INPUT type="text" name="country" id="country"></td><td></td><td><b>$uprors[5]</b></td>
     </tr>
     <tr>
-      <td>email </td><td><INPUT type="text" name="email" id="email"></td><td><b>$uprors[6]</b></td>
+      <td>email </td><td><INPUT type="text" name="email" id="email"></td><td><input type="checkbox" id="vemail" value="$uprors[6]" $listpro{'email'}/></td><td><b>$uprors[6]</b></td>
     </tr>
     <tr>
-      <td>alias </td><td><INPUT type="text" name="alias" id="alias"></td><td><b>$uprors[7]</b></td>
+      <td>alias </td><td><INPUT type="text" name="alias" id="alias"></td><td><input type="checkbox" id="valias" value="$uprors[7]" $listpro{'alias'}/></td><td><b>$uprors[7]</b></td>
     </tr>
     <tr>
       <td>Note </td><td><textarea cols="30" rows="3" name="note" id="note"></textarea></td><td><b>$uprors[8]</b></td>
     </tr>
    <tr>
-      <td><td><input type="button" value="change" onclick="updp([ 'name', 'surname', 'gender', 'birth', 'location', 'country', 'email', 'alias', 'note', 'NO_CACHE' ], ['resu']);"/></td><td></td><td></td>
+      <td><td><input type="button" value="change" onclick="updp([ 'name', 'surname', 'gender', 'birth', 'location', 'country', 'email', 'alias', 'note', 'vname', 'vsurname', 'vemail', 'valias', 'NO_CACHE' ], ['resu']);"/></td><td></td><td></td>
     </tr>
    <tr>
     <td><div id="resupr"></div></td>
@@ -563,16 +578,22 @@ HB1
 sub ucard {
 	
 	my $self = shift;
-	my ( $username, $fixd ) = @_;
+	my ( $username, $fixd, $chp ) = @_;
 	my $dbc = conndb->new;
         my $dbpg = $dbc->dbuse();
         my $nwuser = user->new;
+	my $y = 5;
 	my $ucsq = $nwuser->usercard($username);
         my $ucgq = $dbc->sqlstate($dbpg, $ucsq, "far");
+	if ($chp eq 'ppro') {
+		$ucsq = $nwuser->usercard($username, $chp);
+		$ucgq = $dbc->sqlstate($dbpg, $ucsq, "far");
+		$y = 4;
+	}
 	my @items = @$ucgq;
 	my $nraf = $#items;
 	my $fraf = $#items + 1;
-        my $draf = $fraf / 5;
+        my $draf = $fraf / $y;
 	my $i = 0 ;
         my $y = 0 ;
         my $hb = undef;

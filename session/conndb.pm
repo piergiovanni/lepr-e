@@ -78,14 +78,5 @@ sub sqlstate {
 	}
 }
 	
-#my $dbpg = conndb->dbuse();
-#my $pippo = conndb->sqlstate($dbpg, 'select * from session;', "far");
-#conndb->dbx($dbpg);
-#my @tt = @$pippo;
-#foreach (@tt) {
 
-#	print $_;
-
-#}
-	
 1;

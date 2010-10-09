@@ -74,7 +74,8 @@ sub main {
 	my $vuser = $sed->param('Username');
 	#$vuser .= $ref . $pippo ;
 	#$vuser .= $sed->id() . $sed->is_expired() . $sed->is_empty;
-	my $HTML = $hq->start_html(-script => {-src=> "/tds/js/elabor.js"}, 
+	my $HTML = $hq->start_html( -title   => 'lepr-e',
+				   -script => {-src=> "/tds/js/elabor.js"}, 
 				   -style => {-src=> "/tds/css/style_tds.css"},
 				   -head=>[$hq->meta({ -http_equiv => "cache-control", -content => "no-cache"}),
                                 		$hq->meta({ -http_equiv => "pragma", , -content => "no-cache"}),
@@ -368,10 +369,10 @@ sub editp {
 
 sub updpr {
 	
-	my ( $name, $surname, $gender, $birthday, $location, $nazionality, $email, $alias, $note ) = @_;
+	my ( $name, $surname, $gender, $birthday, $location, $nazionality, $email, $alias, $note, $vname, $vsurname, $vemail, $valias ) = @_;
 	my $dbc = conndb->new;
         my $dbpg = $dbc->dbuse();
-	my $uppsq = $us->edupd($username, $name, $surname, $gender, $birthday, $location, $nazionality, $email, $alias, $note );
+	my $uppsq = $us->edupd($username, $name, $surname, $gender, $birthday, $location, $nazionality, $email, $alias, $note, $vname, $vsurname, $vemail, $valias );
 	my %uplq = %$uppsq;
 	my $upprq;
 	if ($uplq{sql1}) {
@@ -380,6 +381,7 @@ sub updpr {
 	if ($uplq{sql2}) {
 		$upprq = $dbc->sqlstate($dbpg, $uplq{sql2}, "update");
 	}
+	$upprq = $dbc->sqlstate($dbpg, $uplq{sql3}, "update");
 	my $resht = $ht->regu($username);
         return $resht;
 }

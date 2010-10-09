@@ -21,6 +21,7 @@ use config::settings;
 use news::rnews;
 use session::conndb;
 use session::consmtp;
+use lang::langua;
 
 package user;
 
@@ -241,8 +242,9 @@ sub forgotpw {
 		my $nwpw = $usnews->randpw( $eusr );
 		$eusq = "update session set active = \'0_$idact\' where users = \'$eusr\';";
 		$eusr = $dbc->sqlstate($dbh, $eusq, "update");
-		my $datas = "You username is : $username , \n The new password is : $nwpw \n Follow this link $psetup{'domain'}\/regu.pl?$username\?0_$idact to activate your account";
+		my $datas = "You username is : $username , \n The new password is : $nwpw \n Follow this link $psetup{'domain'}\/regu.pl?$username\?0_$idact?chpw to activate your account";
 		$eusr = $smtpc->c_smtp($username, $uemail, "Riactivate your account ...", $datas);
+		#$eusr = $nwpw
 	} else {
 		$eusr = 'xx';
 	}
@@ -269,11 +271,15 @@ sub reguser {
 	my $self = shift;
         #my ( $name, $surname, $username, $birthday, $email, $alias, $gender, $location, $country, $note, $password, $ipaddress, $session) = @_;
         my ( $name, $surname, $email, $username, $password, $ipaddress, $bok, $text, $session, $birthday, $alias, $gender, $location, $country, $note) = @_;
-	my ( $drs, $sqln, $sqlu, $sqlp, $dbc, $dbh, $ausc, $eusc, @eus, @aus, $cktxt ) = undef;
+	my ( $drs, $sqln, $sqlu, $sqlp, $sqlv, $dbc, $dbh, $ausc, $eusc, @eus, @aus, $cktxt ) = undef;
 	#my @txtr = ('Name', 'Surname', 'gender', 'birthday', 'email', 'Username', 'Password', 'location', 'country' );
 	my @txtr = ('Name', 'Surname', 'email', 'Username', 'Password');
+	my $tmst = `date "+%F %H:%M:%S"`;
 	my $usnews = rnews->new();
 	my $smtpc = consmtp->new();
+	my $leng = langua->new;
+	my $wEM = $leng->welcome('en');
+	my $utos = $leng->tosL();
 	my %psetup = config::settings::parmsetup;
 	my $i = 0;
 	foreach ( $name, $surname, $alias, $gender, $location, $country, $note ) {
@@ -302,8 +308,9 @@ sub reguser {
 	} else {
 		$sqln = "insert into notes (unote, gender, nazionality, location, note) values (\'$username\', \'$gender\', \'$location\', \'$country\', \'$note\');";
 		$sqlu = "insert into users (name, surname, username, birthday, email, alias) values (\'$name\', \'$surname\', \'$username\', \'$birthday\', \'$email\', \'$alias\');";
-		$sqlp = "insert into session (users, password, ipaddress, session, active) values (\'$username\', \'$password\', \'$ipaddress\', \'$session\', \'0_$idact\');";
-		my $datas = "Follow this link $psetup{'domain'}\/regu.pl?$username\?0_$idact to activate your account";
+		$sqlp = "insert into session (users, password, ipaddress, session, active, timest) values (\'$username\', \'$password\', \'$ipaddress\', \'$session\', \'0_$idact\', \'$tmst\');";
+		$sqlv = "insert into profile (username) values (\'$username\');";
+		my $datas = "$wEM\n $utos\n Follow this link $psetup{'domain'}\/regu.pl?$username\?0_$idact to activate your account";
 		$dbc = conndb->new;
 		$dbh = $dbc->dbuse();
 		$ausc = user->auser($username);
@@ -317,7 +324,8 @@ sub reguser {
 			$drs = $dbc->sqlstate($dbh, $sqln, "i");
 			$drs = $dbc->sqlstate($dbh, $sqlu, "i");
 			$drs = $dbc->sqlstate($dbh, $sqlp, "i");
-			#$drs = $smtpc->c_smtp($username, $email, "Welcome to lepre ...", $datas);
+			$drs = $dbc->sqlstate($dbh, $sqlv, "i");
+			$drs = $smtpc->c_smtp($username, $email, "Welcome to lepre ...", $datas);
 			$drs = "xx";
 		#} elsif ($bok ne $text) {
 		#	$drs = "<b>Error !!!!!</b><br>";
@@ -372,7 +380,7 @@ sub edup {
 sub edupd {
 
 	my $self = shift;
-        my ( $username, $name, $surname, $gender, $birthday, $location, $nazionality, $email, $alias, $note ) = @_;
+        my ( $username, $name, $surname, $gender, $birthday, $location, $nazionality, $email, $alias, $note, $vname, $vsurname, $vemail, $valias ) = @_;
 	foreach ($name, $surname, $gender, $birthday, $location, $nazionality, $email, $alias, $note ) {
 		$_ = user->ckstr( $_, "i" );
 	}
@@ -400,6 +408,7 @@ sub edupd {
 	if ($str2) {
 		$sql{sql2} = "update notes set $str2 where unote = \'$username\';";
 	}
+	$sql{sql3} = "update profile set name = \'$vname\', surname = \'$vsurname\', email = \'$vemail\', alias = \'$valias\' where username = \'$username\';";
 	return ($self, \%sql);
 
 }
@@ -407,8 +416,11 @@ sub edupd {
 sub usercard {
 	
 	my $self = shift;
-	my ( $username ) = @_;
+	my ( $username, $chp ) = @_;
 	my $sql = "select users.name, users.surname, users.email, users.birthday, notes.location from users inner join notes on users.username = notes.unote where username = \'$username\';";
+	if ($chp eq 'ppro') {
+		$sql = "select name, surname, email, alias from profile where username = \'$username\';";
+	}
 	return ($self, $sql);
 	
 }

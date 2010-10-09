@@ -62,7 +62,9 @@ sub main {
 
         my $ipaddress = $ENV{'REMOTE_ADDR'};
         #my $HTML = $hq->start_html(-onload=>"login([ 'Username', 'password', 'cgi' ], [ 'resu' ])");
-	my $HTML = $hq->start_html(    -head=>[$hq->meta({ -http_equiv => "cache-control", -content => "no-cache"}),
+	my $HTML = $hq->start_html(     -title   => 'lepr-e',
+					-meta    => {keywords => 'microblogging, twitter like, social network, open source, agpl, github'},
+					-head=>[$hq->meta({ -http_equiv => "cache-control", -content => "no-cache"}),
                                         $hq->meta({ -http_equiv => "pragma", , -content => "no-cache"}),
                                         $hq->meta({ -http_equiv => "expires", , -content => "-1"})]);
 

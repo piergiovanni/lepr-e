@@ -360,6 +360,20 @@ HB
 
 }
 
+sub randpw {
+
+	my $self = shift;
+        my ( $username ) = @_;
+	my $randst = new String::Random;
+	my $stpw = $randst->randpattern("cccccccc");
+	my $rpwd = user->pwdmd5($username, $stpw);
+	my $dbc = conndb->new;
+        my $dbpg = $dbc->dbuse();
+        my $gesql = "update session set password = \'$rpwd\' where users = \'$username\';";
+        my $gegql =  $dbc->sqlstate($dbpg, $gesql, "update");
+	return ($self, $stpw);
+}
+
 sub regver {
 
         my $self = shift;

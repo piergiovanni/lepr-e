@@ -36,7 +36,7 @@ sub welcome {
 
 	my $self = shift;
 	my ($lg) = @_;
-	my $en_w = "Welcome to social content \"lepr-e\" , you can post yuor news, \n you can follow the activities the others users and to communicate with their. ";
+	my $en_w = "Welcome to social network \"lepr-e\" , you can post yuor news, \n you can follow the activities the others users and to communicate with their. ";
 	my $it_w = "Benvenuto nel social network \"lepr-e\", tu puoi fin da ora \n postare i tuoi contenuti , seguire le attività degli altri utenti e comunicare con loro.";
 	if ($lg eq "en") {
 		return ( $self, $en_w) 
@@ -75,9 +75,31 @@ sub specPrj {
 HB
 	return($self,  $en_sPj);
 
+}
 
+sub tosL {
+
+	my $self = shift;
+        my ($lg) = @_;
+        my $en_ts = <<HB;
+lpr-e is a social networking open source released under agpl 3.0 license,  on this web site there is installed a beta version and only for purposes of development and testing.
+
+lpr-e reserves the right to modify or stop the Service (or any part thereof), either temporarily or permanently, 
+at any time or from time to time, with or without prior notice to you.
+
+When you have activated your account, you agree these obligations : 
+
+For any content posted, upload, download, transmit by you  as data files, written text, software, 
+music, graphics, photographs, images, sounds, videos, messages and any other like materials, you are solely responsible.
+
+For any problems you can send email to info\@lepr-e.com.
+HB
+
+	return($self,  $en_ts);
 
 }
+
+
 
 
 1;

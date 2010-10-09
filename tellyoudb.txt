@@ -1,3 +1,10 @@
+CREATE USER ..... 
+
+ALTER USER postgres WITH PASSWORD 'postgres';
+
+
+CREATE DATABASE tellyou WITH ENCODING 'UTF-8';
+
 CREATE TABLE home (
     idhome serial NOT NULL,
     "header" character varying(40),
@@ -162,12 +169,24 @@ CREATE TABLE users (
     PRIMARY KEY(iduser)
 );
 
+CREATE TABLE profile (
+    idprof serial UNIQUE NOT NULL,
+    username character varying(40) UNIQUE NOT NULL,
+    name character varying(40),
+    surname character varying(40),
+    email character varying(40),
+    alias character varying(40),
+    PRIMARY KEY(idprof)
+);
+
+
 CREATE TABLE session (
 	idsession serial UNIQUE NOT NULL,
 	users character varying(40) UNIQUE NOT NULL references users(username),
 	password character varying(40),
 	ipaddress varchar(40),
         active varchar(200) default 0,
+	timest TIMESTAMP,
 	session bytea NOT NULL,
 	PRIMARY KEY(idsession)
 );
@@ -177,4 +196,27 @@ CREATE TABLE cgisess (
 	session bytea NOT NULL,
 	PRIMARY KEY(idsession)
 );
+
+
+CREATE LANGUAGE plpgsql;
+
+create or replace function update_fpage(text) RETURNS text AS '
+DECLARE
+listid text[];
+i int;
+BEGIN
+select into listid array (select idnas from news where username = $1 order by timest desc limit 5);
+for i in 1..5 loop 
+
+end loop;
+return listid[2];
+END;
+'
+LANGUAGE plpgsql;
+
+
+
+
+
+
 
